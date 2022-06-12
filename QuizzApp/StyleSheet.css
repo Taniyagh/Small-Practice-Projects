@@ -1,0 +1,71 @@
+@font-face {
+    font-family: 'IRANSans';
+    src: url(./IRANSans.ttf);
+}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family: IRANSans;
+}
+
+body{
+    background-color: #ccc;
+    color:#000;
+    min-height:100vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quiz-container{
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow:0 4px 10px rgba(0, 0, 0, 0.2);
+    width:600px;
+}
+
+.quiz-body{
+    padding:1rem;
+}
+
+.quiz-body h2{
+    font-size: 95%;
+    display: flex;
+    align-items: center;
+    flex-flow: center;
+    text-align: center;
+    direction: rtl;
+}
+
+ul{
+    list-style: none;
+    padding:0;
+    direction: rtl;
+}
+
+ul li{
+    font-size: 0.9rem;
+    margin:1rem 0;
+    direction: rtl;
+}
+
+ul li label{
+    cursor:pointer
+}
+
+button{
+    width:100%;
+    padding:1rem;
+    border:none;
+    outline:none;
+    text-align:center;
+    color:#fff;
+    background:rgba(91,91,197);
+    font-size:1.1rem;
+    border-radius:0px 0px 5px 5px;
+}
+
+input{
+    margin-left:10px;
+}
