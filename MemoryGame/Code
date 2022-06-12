@@ -1,0 +1,126 @@
+// JavaScript source code
+const game=(function(){
+    const wrapper=document.querySelector('.game-wrapper');
+    const row=4;
+    const column=4;
+    const symbols='ABCDEFGHIJKLMNOPQRSTUVWXYZ123584796'.split('');
+    let previousCellIndex=null;
+    let cells=[];
+    let canPlay=false;
+    let gameovercout=0;
+    let winningcount=0;
+    //Create grid
+    const grid=document.createElement('div')
+    grid.classList.add('grid')
+    wrapper.appendChild(grid)
+
+    //Info panel
+    const infoPanel=document.createElement('div')
+    infoPanel.classList.add('info-panel')
+    wrapper.appendChild(infoPanel)
+
+    //Create cells
+    for (let i=0;i<row*column;i+=2){
+        const symbol=randomSymbol()
+        for(let j=0;j<2;j++){
+            const currentcellIndex=i+j;
+            const cellElement=document.createElement('div')
+            //console.log(cellElement)
+            cellElement.classList.add('cell');
+            cellElement.style.width=`${100/column}%`;
+            //console.log(symbol)
+            cellElement.innerText=symbol;
+            
+            const cell={
+                symbol:symbol,
+                element:cellElement,
+                hasMatch:false,
+            }
+            setTimeout(()=>{
+                cellElement.classList.add('hide')
+            },randomInt(2500,3500))
+
+            if(currentcellIndex>2){
+                const previousRandomIndex=randomInt(0,i)
+                cells[currentcellIndex]=cells[previousRandomIndex];
+                cells[previousRandomIndex]=cell;
+            }else{
+                cells[currentcellIndex]=cell;
+            }
+        }
+    }
+
+
+    //add all elements
+    
+    cells.forEach((item,index)=>{
+        item.element.addEventListener('click',()=>cellclickHandeler(index))
+        grid.appendChild(item.element)
+        canPlay=true;
+    })
+
+
+    function randomSymbol(){
+        const symbolIndex=randomInt(0,symbols.length-1)
+        const symbol=symbols[symbolIndex];
+        //console.log(symbol)
+        //delete symbol from symbols
+        symbols.splice(symbolIndex,1)
+        return symbol
+    }
+    
+    function randomInt(min,max){
+        return Math.round(Math.random()*(max-min))+min
+    }
+
+    function cellclickHandeler(index){
+        const cellElement=cells[index].element
+        if(canPlay && cellElement.classList.contains('hide')){
+            canPlay=false;
+            cellElement.classList.remove('hide')
+            if(previousCellIndex===null){
+                //first click
+                previousCellIndex=index;
+                canPlay=true;
+            }else{
+                if (cells[previousCellIndex].symbol===cells[index].symbol){                  
+                    cells[previousCellIndex].hasMatch=true;
+                    cells[index].hasMatch=true;
+                    ++winningcount;
+
+                    setTimeout(()=>{
+                        canPlay=true;
+                        previousCellIndex=null;
+                    },500)
+
+                    if(winningcount>=8){
+                        showInfo('You win!','green')
+                    }else{
+                        showInfo('MATCHED','green')
+                    }   
+
+                }else{ 
+                    
+                    cells[previousCellIndex].element.classList.add('hide'); 
+                    ++gameovercout
+
+                    setTimeout(()=>{                        
+                        cellElement.classList.add('hide');
+                        previousCellIndex=null;                        
+                    },1000)
+                    
+                    if(gameovercout>=3){
+                        showInfo('You get gameover!', 'red')
+                        canPlay=false;
+                    }else{
+                        showInfo('NOT MATCHED', 'red')
+                        canPlay=true;
+                    }
+                }
+            }
+        }
+    }
+    function showInfo(message,type){
+        infoPanel.innerHTML=`<span class='${type}'>${message}</span>`
+    }
+})();
