@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="StyleSheet.css"/>
+    <title>Password Generator</title>
+</head>
+<body>
+    <div class="password-container">
+        <div class="password-header">
+            <div class="password" id="pw">
+                <span style="direction:rtl;"></span>
+                <button id="copy">کپی</button>
+            </div>
+        </div>
+        <div class="password-body">
+            <div class="form-contrl"> 
+                <lable for="len">طول رمز</lable>
+                <input type="number" id="len" min="6" max="40" value="8">               
+            </div>
+            <div class="form-contrl"> 
+                <lable for="upper">شامل حروف بزرگ</lable>
+                <input type="checkbox" id="upper">               
+            </div>
+            <div class="form-contrl"> 
+                <lable for="lower">شامل حروف کوچک</lable>
+                <input type="checkbox" id="lower">               
+            </div>
+            <div class="form-contrl"> 
+                <lable for="number">شامل اعداد</lable>
+                <input type="checkbox" id="number">               
+            </div>
+            <div class="form-contrl"> 
+                <lable for="symbol">شامل نماد</lable>
+                <input type="checkbox" id="symbol">               
+            </div>
+            <button class="generate" id="generate">ساخت رمز</button>
+        </div>
+    </div>
+    <script src="Code.js"></script>
+</body>
+</html>
