@@ -1,0 +1,147 @@
+﻿@font-face{
+	font-family:'IranSans';
+	src: local('ir_Sans'), url(./ir_Sans.ttf) format('truetype')
+}
+*{
+	padding:0px;
+	margin:0px;
+	box-sizing:border-box;
+	font-family:IranSans;
+}
+header,form{
+	display:flex;
+	min-height:20vh;
+	font-size:100%;
+	justify-content:center;
+	align-items:center;
+	direction:rtl;
+}
+form input, form button{
+	padding:0.5rem;
+	font-size:1.5rem;
+	border:none;
+	background-color:white;
+	direction:rtl;
+}
+form input[type="text"], form input[type="number"]{
+	border:1px solid #777777;
+	border-radius:5px;
+	margin-left:5px;
+}
+form input:focus{
+	outline:none;
+}
+
+form button{
+	color:white;
+	background-color:#f86c6b;
+	cursor:pointer;
+	transition: all 0.3s ease;
+	border: 1px solid transparent;
+	height:60px;
+	width:60px;
+	border-radius:30px;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+}
+
+form button:hover{
+	background:#f65846;
+	color:white;
+}
+
+select{
+	-webkit-appearance:none;
+	-moz-appearance:none;
+	appearance:none;
+	border:none;
+	outline:none;
+	color:#777777;
+	width:10rem;
+	padding:1rem;
+	font-family:IranSans;
+	font-size:16px;
+	border:1px solid #777777;
+	border-radius: 0 5px 5px 0;
+}
+.type-number{
+	margin: 1rem;
+	position:relative;
+	overflow:hidden;
+
+}
+.type-number::after, .select::after{
+	content:"\25BC";
+	position:absolute;
+	background:#f86c6b;
+	color:white;
+	top:0;
+	left:0;
+	padding:1rem;
+	height:60px;
+	pointer-events:none;
+	transition: all 0.3s ease;
+}
+.todo-container
+{
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	flex-flow:column;
+}
+
+.todo-list{
+	min-width:30%;
+	list-style: none;
+}
+
+.todo{
+	background:white;
+	margin:0.5rem;
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	color:Black;
+	font-size:1.5rem;
+	direction:rtl;
+	opacity:1;
+	border: 1px #777777 solid;
+	transition: all 0.3s ease;
+}
+.todo-item{
+	flex:1;
+	padding: 0 0.5rem;
+	text-align:right;
+	display:flex;
+	flex-flow:column;
+}
+
+.todo-item span{
+	color:#777777;
+	font-size:16px;
+}
+.trashButton{
+	background:#f86c6b;
+	border:none;
+	color:white;
+	padding:2rem;
+	cursor:pointer;
+	font-size:1rem;
+}
+.fall{
+	opacity:0;
+	transform: translateX(300%) rotateZ(250deg);
+	transition: all ease 2s;
+}
+.select{
+	margin:1rem;
+	position:relative;
+	overflow:hidden;
+	min-width:30%;
+}
+.filter-todo{
+	width:100%;
+	direction:rtl;
+	display:none;
+}
