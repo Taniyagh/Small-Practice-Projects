@@ -1,0 +1,75 @@
+﻿@font-face {
+    font-family: 'IRANSans';
+    src: url(IRANSans.ttf);
+}
+*{
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:0;
+    min-height:100vh;
+    font-size:18px;
+    font-family: IRANSans;
+}
+.game-wrapper{
+    width:300px;
+    margin:30px auto 0;
+
+}
+.grid{
+    width:300px;
+    height:300px;
+    display:flex;
+    flex-flow:row wrap;
+}
+
+.info-panel{
+    text-align: center;
+    font-weight: bold;
+    padding: 20px 0;
+    font-size:24px;
+}
+
+.info-panel .red{
+    color: darkred;
+
+}
+.info-panel .green{
+    color:darkgreen;
+}
+.cell{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size:24px;
+    box-sizing:border-box;
+    border: 1px solid #ddd;
+    background-color: #587a78;
+    cursor:pointer;
+    transition: all ease .5s;
+    position:relative;
+    transform-style: preserve-3d;
+    color:#ddd;
+}
+
+.cell::after{
+    width: 100%;
+    height:100%;
+    background-color: #339a76;
+    content:'';
+    position: absolute;
+    top:0;
+    left:0;
+    z-index:-1;
+    transform: rotateY(180deg);
+}
+
+.cell.hide{
+    transform: rotateY(180deg);
+    color:#339a76 ;
+}
+
