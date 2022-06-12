@@ -1,0 +1,103 @@
+
+const quizData=[
+    {
+        question:'پایتخت ایالت متحده آمریکا کجاست؟',
+        a:'واشنگتن',
+        b:'لاس وگاس',
+        c:'نیویورک',
+        d:'لوس آنجلس',
+        correct:'a',
+    },
+    {
+        question:'تخت جمشید در کدام استان قرار دارد؟',
+        a:'اصفهان',
+        b:'مرکزی ',
+        c:'فارس',
+        d:'قم',
+        correct:'c',
+    },
+    {
+        question:'تالاب شادگان در کدام استان قرار دارد؟',
+        a:'اصفهان',
+        b:'خوزستان ',
+        c:'فارس',
+        d:'قم',
+        correct:'b',
+    },
+    {
+        question:'علی کریمی در چه سالی جایزه مرد سال آسیا را دریافت کرد؟',
+        a:'2002',
+        b:'2001',
+        c:'2007',
+        d:'2004',
+        correct:'d',
+    }
+]
+
+const questionElement=document.getElementById('question')
+const options=document.querySelector('.quiz-body ul')
+const submitbtn=document.getElementById('submit')
+let score=0;
+let currentQuestion=0;
+loadQuiz();
+function loadQuiz(){
+    const currentQuizData=quizData[currentQuestion];
+    questionElement.innerText=currentQuizData.question;
+    const symbols='abcd'.split("");
+    
+    while(symbols.length>0){
+        const symbolIndex=Math.floor(Math.random()*symbols.length);
+        const symbol=symbols[symbolIndex];
+        symbols.splice(symbolIndex,1);
+
+        //creating selection boxes
+        const liElement=document.createElement('li');
+        const inputElement=document.createElement('input');
+        inputElement.setAttribute('type','radio')
+        inputElement.setAttribute('id',symbol)
+        inputElement.setAttribute('name','answer')
+        const labelElement=document.createElement('lable')
+        labelElement.setAttribute('id',`${symbol}_text`)
+        labelElement.setAttribute('for',symbol)
+        labelElement.innerText=currentQuizData[symbol]
+        liElement.appendChild(inputElement)
+        liElement.appendChild(labelElement)
+        options.appendChild(liElement)
+    }
+}
+
+function getselected(){
+    const answerElements=document.querySelectorAll('input')
+    let answer=undefined;
+    answerElements.forEach(answerElement=>{
+        if(answerElement.checked){
+            answer=answerElement.id;
+            return answer;
+        }
+    })
+    return answer;
+}
+
+function deletePreviousAnswer(){
+    options.innerHTML=''
+}
+
+
+submitbtn.addEventListener('click',()=>{
+    const answer=getselected()
+    console.log(answer)
+    if (answer===quizData[currentQuestion].correct){
+        score++
+    }
+    if(currentQuestion<quizData.length-1){
+        currentQuestion++
+        deletePreviousAnswer()
+        loadQuiz()
+    }else{
+        submitbtn.innerText=`پایان سوالات | امتیاز شما : ${score}`
+        submitbtn.style.background='red';
+        submitbtn.style.cursor='no-drop'
+        submitbtn.setAttribute('disabled',true)
+        return false
+    }
+})
