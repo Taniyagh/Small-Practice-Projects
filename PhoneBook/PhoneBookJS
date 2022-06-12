@@ -1,0 +1,193 @@
+// JavaScript source code
+
+	//selector
+	const todoNameInput=document.querySelector('.todo-name-input');
+	const todoMobileInput=document.querySelector('.todo-mobile-input');
+	const todoButton=document.querySelector('.todo-button');
+	const todoList=document.querySelector('.todo-list');
+	const selectBox=document.querySelector('.type-todo');
+	const filterOption=document.querySelector('.filter-todo');
+
+	//evenlistener
+	todoButton.addEventListener('click',addItem);
+	todoList.addEventListener('click',deleteItem);
+	filterOption.addEventListener('click',filterContacts);
+	document.addEventListener('DOMContentLoaded',getContacts);
+
+	//functions
+	//add items to list
+	function addItem(event){
+		event.preventDefault()
+		//new div 
+		const todoDiv=document.createElement('div');
+		todoDiv.classList.add('todo');
+		todoDiv.classList.add(selectBox.options[selectBox.selectedIndex].value);
+		todoList.appendChild(todoDiv);
+
+		//new list item and its childs
+		const newItem=document.createElement('li');
+		const nameSpan=document.createElement('span');
+		const mobileSpan=document.createElement('span');
+		const typeSpan=document.createElement('span');
+
+		nameSpan.innerText=todoNameInput.value;
+		mobileSpan.innerText=todoMobileInput.value;
+		typeSpan.innerText=selectBox.options[selectBox.selectedIndex].innerText;
+		
+		newItem.appendChild(nameSpan);
+		newItem.appendChild(mobileSpan);
+		newItem.appendChild(typeSpan);
+		newItem.classList.add('todo-item');
+
+		todoDiv.appendChild(newItem);
+
+		//trash button
+		const trashButton=document.createElement('button');
+		trashButton.innerHTML='<i class="fas fa-trash"></i>'
+		trashButton.classList.add('trashButton');
+		todoDiv.appendChild(trashButton);
+
+		//save in Local Storage
+
+		saveLocalcontact({
+			name:todoNameInput.value,
+			number:todoMobileInput.value,
+			type: selectBox.options[selectBox.selectedIndex].innerText
+		})
+
+		//empty value after adding input
+		todoMobileInput.value='';
+		todoNameInput.value='';
+		//adding filters
+		filterOption.style.display='block';
+	}
+	//delete item form list
+	function deleteItem(event){
+		const item=event.target;
+		if(item.classList[0]==='trashButton'){
+			const contact=item.parentElement;
+			contact.classList.add('fall');
+			setTimeout(()=>{
+				contact.remove();
+			},3000)
+			removeLocalcontact(contact);
+		}
+			
+		//remove item from local storage
+		
+	}
+
+	//filter items 
+	function filterContacts(event){
+		const contacts=todoList.childNodes;
+		contacts.forEach(function(contact){
+			switch(event.target.value){
+				case "2":
+						contact.style.display="flex";
+				break;
+				case "1":
+					if(contact.classList.contains('1'))
+					{
+						contact.style.display="flex";
+					}else{
+						contact.style.display="none";
+					}
+				break;
+				case "0":
+					if(!contact.classList.contains('1'))
+					{
+						contact.style.display="flex";
+					}else{
+						contact.style.display="none";
+					}
+				break;
+			}
+
+		})
+	}
+
+	//save local contact function
+	function saveLocalcontact(contact){
+		let contacts;
+		if(localStorage.getItem('contacts')===null)
+		{
+			contacts=[];
+		}else
+		{
+			contacts=JSON.parse(localStorage.getItem('contacts'));
+		}
+		contacts.push(contact);
+		localStorage.setItem('contacts',JSON.stringify(contacts));
+	}
+
+	//remove contact fromm local storage
+	function removeLocalcontact(contact){
+		let contacts;
+		if(localStorage.getItem('contacts')===null)
+		{
+			contacts=[];
+		}else
+		{
+			contacts=JSON.parse(localStorage.getItem('contacts'));
+		}
+
+
+		const result= contact.children[0].innerHTML.split('</span>');
+		//console.log(contact.children[0].innerHTML);
+		const number=result[1].match(/\d/g).join('');
+		//console.log(number);
+		const index=contacts.findIndex(item=>item.number===number)
+		//console.log(index);
+		contacts.splice(index,1);
+		localStorage.setItem('contacts',JSON.stringify(contacts));
+	}
+
+	//showing all contacts in local storage to the user
+	function getContacts(){
+		let contacts;
+		if(localStorage.getItem('contacts')===null)
+		{
+			contacts=[];
+		}else
+		{
+			contacts=JSON.parse(localStorage.getItem('contacts'));
+		}
+		
+		contacts.forEach(function(contact){
+			//new div 
+			const todoDiv=document.createElement('div');
+			todoDiv.classList.add('todo');
+			todoDiv.classList.add(selectBox.options[selectBox.selectedIndex].value);
+			todoList.appendChild(todoDiv);
+
+			//new list item and its childs
+			const newItem=document.createElement('li');
+			const nameSpan=document.createElement('span');
+			const mobileSpan=document.createElement('span');
+			const typeSpan=document.createElement('span');
+
+			nameSpan.innerText=contact.name;
+			mobileSpan.innerText=contact.number;
+			typeSpan.innerText=contact.type;
+		
+			newItem.appendChild(nameSpan);
+			newItem.appendChild(mobileSpan);
+			newItem.appendChild(typeSpan);
+			newItem.classList.add('todo-item');
+
+			todoDiv.appendChild(newItem);
+
+			//trash button
+			const trashButton=document.createElement('button');
+			trashButton.innerHTML='<i class="fas fa-trash"></i>'
+			trashButton.classList.add('trashButton');
+			todoDiv.appendChild(trashButton);	
+
+			//empty value after adding input
+			todoMobileInput.value='';
+			todoNameInput.value='';
+			//adding filters
+			filterOption.style.display='block';
+		})
+	}
+	
