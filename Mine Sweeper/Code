@@ -1,0 +1,188 @@
+// JavaScript source code
+
+const miner=(function(){
+    const colcount=6;
+    const rowcount=6;
+    const bombcount=4;
+    let visibleCellCount=0;
+    const grid=[];
+    const gridElement=document.querySelector('.grid')
+    const infoElement=document.getElementById('Info')
+
+    //Defining classes
+    class square{
+        constructor(){
+            this.isVisible=false;
+            this.isBomb=false;
+            this.element=null;
+        }
+        show(){
+            this.element.classList.add('visible')
+            this.isVisible=true;
+        }
+
+    }
+
+    class Cell extends square{
+        constructor(){
+            super()
+            this.value=0;
+        }
+        increaseValue(){
+            this.value+=1
+        }
+    }
+
+    class Bomb extends square{
+        constructor(){
+            super()
+            this.isBomb=true;
+            this.value='💣'
+        }
+    }
+    //Defining classes
+
+
+    //calculating coordinate of a cell
+    function convert2D(index,colcount){
+        return{
+            'i':index % colcount,
+            'j':(index-(index % colcount))/colcount
+        }
+    }
+
+    //calculating neighbors of a bomb cell
+    function neighboursF(index,colcount,rowcount){
+        const neighbours=[];
+        const {i,j}=convert2D(index,colcount)
+        //console.log(index,i,j)
+        //right side
+        if(i+1<colcount){
+            //right
+            neighbours.push(index+1)
+            //right down
+            if(j+1<rowcount){
+                neighbours.push(index+1+colcount)
+            }
+            //right up
+            if(j>0){
+                neighbours.push(index-colcount+1)
+            }
+        }
+        //left side
+        if (i>0){
+            //left
+            neighbours.push(index-1)
+            //left up
+            if(j>0){
+                neighbours.push(index-colcount-1)
+            }
+            //left down
+            if(j+1<rowcount){
+                neighbours.push(index+colcount-1)
+            }
+        }
+        //Top side
+        if(j>0){
+            neighbours.push(index-colcount)
+        }
+
+        //Down side
+        if(j+1<rowcount){
+            neighbours.push(index+colcount)
+        }
+        console.log(index,neighbours)
+        return neighbours
+    }
+
+    gridElement.style="grid-template-columns:repeat("+colcount+",1fr)"
+    const bombIndexs=randomIntegers(bombcount,0,(colcount*rowcount-1))
+
+    //creating bomb cells
+    bombIndexs.forEach((bombIndex)=>{
+        grid[bombIndex]=new Bomb();
+    })
+
+    //filling not bomb cells
+    bombIndexs.forEach(bombIndex=>{
+        const neighbours=neighboursF(bombIndex,colcount,rowcount)
+        neighbours.forEach(neighbour=>{
+            if(typeof grid[neighbour]==='undefined'){
+                grid[neighbour]=new Cell();
+            }
+            if (!grid[neighbour].isBomb){
+                grid[neighbour].increaseValue()
+            }
+        })
+        
+    })
+
+    for (let i=0; i<colcount*rowcount; i++){
+        if(typeof grid[i]==='undefined'){
+            grid[i]=new Cell()
+        }
+
+        const cellElement=document.createElement('div');
+        cellElement.classList.add('cell')
+        cellElement.innerHTML=`<div class="center">${grid[i].value}</div>`
+        cellElement.addEventListener('click',function(){
+            grid[i].show();
+            visibleCellCount++;
+            if(grid[i].isBomb){
+                alert("Bomb! GAME OVER!")
+                visibleCells()
+            }else{
+                if(grid[i].value===0){
+                    showBombNeighbours(i)
+                }
+                check()
+            }
+        })
+        gridElement.appendChild(cellElement)
+        grid[i].element=cellElement
+    }
+
+    //general function  
+    function randomIntegers(n,min,max){
+        let randomNumber=null;
+        const result=[];    
+        while(n>0){
+            randomNumber=Math.round(min+Math.random()*(max-min))
+            if(result.indexOf(randomNumber)===-1){
+                n--
+                result.push(randomNumber)
+            }           
+        }
+        return result
+        
+    }
+
+    const cells=document.querySelectorAll('.cell')
+
+    function visibleCells(){
+        cells.forEach(cell=>{
+        cell.classList.add('visible')
+        })
+    }
+    infoElement.innerHTML=`<button onClick="location.reload()">شروع مجدد</button>`
+
+    function showBombNeighbours(i){
+        const neighbors=neighboursF(i,colcount,rowcount)
+        neighbors.forEach(neighbour=>{
+            if(grid[neighbour].isBomb===false && grid[neighbour].isVisible===false){
+                grid[neighbour].show()
+                visibleCellCount++
+                if(grid[neighbour].value===0){
+                    showBombNeighbours(neighbour)
+                }
+            }
+        })
+    }
+
+    function check(){
+        if(visibleCellCount+bombcount===rowcount*colcount){
+            alert("You win!")
+        }
+    }
+
+})();
